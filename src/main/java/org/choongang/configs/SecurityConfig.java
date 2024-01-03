@@ -44,7 +44,7 @@ public class SecurityConfig {
         // hasRole('ADMIN')
         http.authorizeHttpRequests(c -> {   // 인가 설정. 특정 권한 -> 특정 페이지 가능하도록
            c.requestMatchers("/mypage/**").authenticated()  //회원 전용
-                   .requestMatchers("/admin/**").hasAnyAuthority("ADMIN", "MANAGER")
+//                   .requestMatchers("/admin/**").hasAnyAuthority("ADMIN", "MANAGER")
                    .anyRequest().permitAll();   // 그 외 모든 페이지는 모두 접근 가능
         });
         http.exceptionHandling(c -> {
