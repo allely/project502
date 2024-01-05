@@ -27,7 +27,7 @@ public class MvcConfig implements WebMvcConfigurer {
 
         // 배포 시 static 내의 css 적용하지 못하는 문제를 해결
         registry.addResourceHandler("/**")
-                .addResourceLocations("classpath:/static/*");
+                .addResourceLocations("classpath:/static/");
     }
 
     @Bean
