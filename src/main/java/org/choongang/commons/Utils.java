@@ -50,7 +50,7 @@ public class Utils {
         type = StringUtils.hasText(type) ? type : "validations";
 
         ResourceBundle bundle = null;
-        if (type.equals("common")) {
+        if (type.equals("commons")) {
             bundle = commonsBundle;
         } else if (type.equals("errors")) {
             bundle = errorsBundle;
@@ -62,5 +62,17 @@ public class Utils {
 
     public static String getMessage(String code) {
         return getMessage(code, null);
+    }
+
+    /**
+     * \n 또는 \r\n -> <br>
+     * @param str
+     * @return
+     */
+    public String nl2br(String str) {
+        str = str.replaceAll("\\n", "<br>")
+                .replaceAll("\\r", "<br>");
+
+        return str;
     }
 }
