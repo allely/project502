@@ -13,6 +13,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.StringUtils;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,16 +25,18 @@ import java.security.Principal;
 public class MemberController implements ExceptionProcessor {
     private final Utils utils;
     private final JoinService joinService;
-    private final MemberUtils memberUtils;
 
     @GetMapping("/join")
-    public String join(@ModelAttribute RequestJoin form) {
+    public String join(@ModelAttribute RequestJoin form, Model model) {
+        commonProcess("join", model);
 
         return utils.tpl("member/join");
     }
 
     @PostMapping("/join")
-    public String joinPs(@Valid RequestJoin form, Errors errors) {
+    public String joinPs(@Valid RequestJoin form, Errors errors, Model model) {
+        commonProcess("join", model);
+
         joinService.process(form, errors);
 
         if (errors.hasErrors()) {
@@ -44,9 +47,21 @@ public class MemberController implements ExceptionProcessor {
     }
 
     @GetMapping("/login")
-    public String login() {
-
+    public String login(Model model) {
+        commonProcess("login", model);
         return utils.tpl("member/login");
+    }
+
+    /*
+     * 회원가입 title 유지 위해
+     */
+    private void commonProcess(String mode, Model model) {  // 공통 처리할 메서드, 내부 사용으로 private
+        mode = StringUtils.hasText(mode) ? mode : "join";
+        String pageTitle = Utils.getMessage("회원가입", "commons");
+        if (mode.equals("login")) {
+            pageTitle = Utils.getMessage("로그인", "commons");
+        }
+        model.addAttribute("pageTitle", pageTitle);
     }
 
     /*
@@ -76,7 +91,7 @@ public class MemberController implements ExceptionProcessor {
         System.out.println(memberInfo);
     }
      */
-
+/*
     @ResponseBody
     @GetMapping("/info")
     public void info() {
@@ -87,4 +102,5 @@ public class MemberController implements ExceptionProcessor {
             System.out.println("미로그인 상태...");
         }
     }
+    */
 }

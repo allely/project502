@@ -24,6 +24,10 @@ public class MvcConfig implements WebMvcConfigurer {
         // 현재 경로를 포함한 하위경로 모두
         registry.addResourceHandler(fileProperties.getUrl() + "**")
                 .addResourceLocations("file:///" + fileProperties.getPath());
+
+        // 배포 시 static 내의 css 적용하지 못하는 문제를 해결
+        registry.addResourceHandler("/**")
+                .addResourceLocations("classpath:/static/*");
     }
 
     @Bean
