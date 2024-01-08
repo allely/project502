@@ -4,20 +4,15 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.choongang.commons.ExceptionProcessor;
 import org.choongang.commons.Utils;
-import org.choongang.member.MemberUtils;
-import org.choongang.member.entities.Member;
 import org.choongang.member.services.JoinService;
-import org.choongang.member.services.JoinService;
-import org.choongang.member.services.MemberInfo;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 
-import java.security.Principal;
+import java.util.ArrayList;
+import java.util.List;
 
 @Controller
 @RequestMapping("/member")
@@ -58,10 +53,20 @@ public class MemberController implements ExceptionProcessor {
     private void commonProcess(String mode, Model model) {  // 공통 처리할 메서드, 내부 사용으로 private
         mode = StringUtils.hasText(mode) ? mode : "join";
         String pageTitle = Utils.getMessage("회원가입", "commons");
+
+        List<String> addCommonScript = new ArrayList<>();   // 공통 자바스크립트
+        List<String> addScript = new ArrayList<>();  // 프론트 자바 스크립트
+
+
         if (mode.equals("login")) {
             pageTitle = Utils.getMessage("로그인", "commons");
+        } else if (mode.equals("join")) {
+            addCommonScript.add("fileManager");
+            addScript.add("member/form");
         }
+
         model.addAttribute("pageTitle", pageTitle);
+        model.addAttribute("addCommonScript", addCommonScript);
     }
 
     /*
