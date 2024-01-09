@@ -67,6 +67,7 @@ public class MemberController implements ExceptionProcessor {
 
         model.addAttribute("pageTitle", pageTitle);
         model.addAttribute("addCommonScript", addCommonScript);
+        model.addAttribute("addScript", addScript);
     }
 
     /*
@@ -109,3 +110,7 @@ public class MemberController implements ExceptionProcessor {
     }
     */
 }
+/* localhost:3000/memberjoin -> @Mapping(/member/join)controller -> html파일
+ * -> 회원정보 입력, 제출 -> validator(@검증, 작성된 validator) -> 성공 / 실패
+ *
+ */

@@ -32,4 +32,10 @@ public class MemberController implements ExceptionProcessor {
         model.addAttribute("subMenuCode", "list");
         return "admin/member/list";
     }
+
+    @GetMapping("/authority")
+    public String authority(Model model) {
+
+       return "admin/member/authority";
+    }
 }

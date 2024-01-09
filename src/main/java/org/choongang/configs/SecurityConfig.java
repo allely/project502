@@ -58,6 +58,10 @@ public class SecurityConfig {
             });
         });
         /* 인가 설정 E - 접근 통제 */
+
+        // 같은 출처(서버)의 사이트에서는 iframe 사용가능하도록 설정
+        http.headers(c -> c.frameOptions(f -> f.sameOrigin()));
+
         return http.build();
     }
 
