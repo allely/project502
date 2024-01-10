@@ -3,9 +3,14 @@ package org.choongang.commons;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import org.choongang.admin.config.controllers.BasicConfig;
+import org.choongang.file.service.FileInfoService;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
+import java.util.Arrays;
+import java.util.List;
+import java.util.Objects;
 import java.util.ResourceBundle;
 
 @Component
@@ -14,6 +19,7 @@ public class Utils {
 
     private final HttpServletRequest request;
     private final HttpSession session;
+    private final FileInfoService fileInfoService;
 
     private static final ResourceBundle commonsBundle;
     private static final ResourceBundle validationsBundle;
@@ -70,9 +76,59 @@ public class Utils {
      * @return
      */
     public String nl2br(String str) {
+        str = Objects.requireNonNullElse(str, "");
         str = str.replaceAll("\\n", "<br>")
-                .replaceAll("\\r", "<br>");
+                .replaceAll("\\r", "");
 
         return str;
+    }
+
+    /**
+     * 썸네일 사이즈 설정
+     * @return
+     */
+    public List<int[]> getThumbSize() {
+        BasicConfig config = (BasicConfig) request.getAttribute("siteConfig");
+        String thumbSize = config.getThumbSize();   // \r\n
+        String[] thumbsSize = thumbSize.split("\\n");
+
+        List<int[]> data = Arrays.stream(thumbsSize)
+                .filter(StringUtils::hasText)       //
+                .map(s -> s.replaceAll("\\s+", "")) // ???
+                .map(this::toConvert).toList();
+
+        return data;
+    }
+    private int[] toConvert(String size) {
+        size = size.trim(); // 공백 제거
+        int[] data = Arrays.stream(size.replaceAll("\\r", "")   // \r 제거
+                .toUpperCase().split("X"))
+                .mapToInt(Integer::parseInt).toArray();
+
+        return data;
+    }
+
+    public String printThumb(long seq, int width, int height, String className) {
+        String[] data = fileInfoService.getThumb(seq, width, height);
+        if (data != null) {
+            String cls = StringUtils.hasText(className) ? " class='" + className + "'" : "";
+            String image = String.format("<img src='%s'%s>", data[1], cls);
+            return image;
+        }
+        return "";
+    }
+
+    public String printThumb(long seq, int width, int height) {
+        return printThumb(seq, width, height, null);
+    }
+
+    /**
+     * 0 이하 정수인 경우 1 이상 정수로 대체
+     * @param num
+     * @param replace
+     * @return
+     */
+    public static int onlyPositiveNumber(int num, int replace) {
+        return num < 1 ? replace : num;
     }
 }

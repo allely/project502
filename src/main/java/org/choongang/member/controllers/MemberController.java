@@ -4,20 +4,16 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.choongang.commons.ExceptionProcessor;
 import org.choongang.commons.Utils;
-import org.choongang.member.MemberUtils;
-import org.choongang.member.entities.Member;
 import org.choongang.member.services.JoinService;
-import org.choongang.member.services.JoinService;
-import org.choongang.member.services.MemberInfo;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.support.SessionStatus;
 
-import java.security.Principal;
+import java.util.ArrayList;
+import java.util.List;
 
 @Controller
 @RequestMapping("/member")
@@ -30,11 +26,14 @@ public class MemberController implements ExceptionProcessor {
     public String join(@ModelAttribute RequestJoin form, Model model) {
         commonProcess("join", model);
 
+        // 이메일 인증 여부 false로 초기화
+        model.addAttribute("EmailAuthVerified", false);
+
         return utils.tpl("member/join");
     }
 
     @PostMapping("/join")
-    public String joinPs(@Valid RequestJoin form, Errors errors, Model model) {
+    public String joinPs(@Valid RequestJoin form, Errors errors, Model model, SessionStatus sessionStatus) {
         commonProcess("join", model);
 
         joinService.process(form, errors);
@@ -42,6 +41,9 @@ public class MemberController implements ExceptionProcessor {
         if (errors.hasErrors()) {
             return utils.tpl("member/join");
         }
+
+        // 이메일 인증 여부 false로 초기화
+        model.addAttribute("EmailAuthVerified", false);
 
         return "redirect:/member/login";
     }
@@ -58,10 +60,21 @@ public class MemberController implements ExceptionProcessor {
     private void commonProcess(String mode, Model model) {  // 공통 처리할 메서드, 내부 사용으로 private
         mode = StringUtils.hasText(mode) ? mode : "join";
         String pageTitle = Utils.getMessage("회원가입", "commons");
+
+        List<String> addCss = new ArrayList<>();
+        List<String> addScript = new ArrayList<>();  // 프론트 자바 스크립트
+
+
         if (mode.equals("login")) {
             pageTitle = Utils.getMessage("로그인", "commons");
+        } else if (mode.equals("join")) {
+            addCss.add("member/join");
+            addScript.add("member/join");
         }
+
         model.addAttribute("pageTitle", pageTitle);
+        model.addAttribute("addCss", addCss);
+        model.addAttribute("addScript", addScript);
     }
 
     /*

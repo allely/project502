@@ -6,7 +6,7 @@ import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.choongang.admin.config.controllers.BasicConfig;
 import org.choongang.admin.config.service.ConfigInfoService;
-import org.choongang.member.MemberUtils;
+import org.choongang.member.MemberUtil;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -49,7 +49,7 @@ public class CommonInterceptor implements HandlerInterceptor {
         String URL = request.getRequestURI();
         if (URL.indexOf("/member/login") == -1) {   // 안의 주소 내용이 없을 때
             HttpSession session = request.getSession();
-            MemberUtils.clearLoginData(session);
+            MemberUtil.clearLoginData(session);
         }
     }
     private void loadSiteConfig(HttpServletRequest request) {
