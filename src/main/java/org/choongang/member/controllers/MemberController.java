@@ -10,6 +10,7 @@ import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.support.SessionStatus;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,11 +26,14 @@ public class MemberController implements ExceptionProcessor {
     public String join(@ModelAttribute RequestJoin form, Model model) {
         commonProcess("join", model);
 
+        // 이메일 인증 여부 false로 초기화
+        model.addAttribute("EmailAuthVerified", false);
+
         return utils.tpl("member/join");
     }
 
     @PostMapping("/join")
-    public String joinPs(@Valid RequestJoin form, Errors errors, Model model) {
+    public String joinPs(@Valid RequestJoin form, Errors errors, Model model, SessionStatus sessionStatus) {
         commonProcess("join", model);
 
         joinService.process(form, errors);
@@ -37,6 +41,9 @@ public class MemberController implements ExceptionProcessor {
         if (errors.hasErrors()) {
             return utils.tpl("member/join");
         }
+
+        // 이메일 인증 여부 false로 초기화
+        model.addAttribute("EmailAuthVerified", false);
 
         return "redirect:/member/login";
     }
@@ -54,19 +61,19 @@ public class MemberController implements ExceptionProcessor {
         mode = StringUtils.hasText(mode) ? mode : "join";
         String pageTitle = Utils.getMessage("회원가입", "commons");
 
-        List<String> addCommonScript = new ArrayList<>();   // 공통 자바스크립트
+        List<String> addCss = new ArrayList<>();
         List<String> addScript = new ArrayList<>();  // 프론트 자바 스크립트
 
 
         if (mode.equals("login")) {
             pageTitle = Utils.getMessage("로그인", "commons");
         } else if (mode.equals("join")) {
-            addCommonScript.add("fileManager");
-            addScript.add("member/form");
+            addCss.add("member/join");
+            addScript.add("member/join");
         }
 
         model.addAttribute("pageTitle", pageTitle);
-        model.addAttribute("addCommonScript", addCommonScript);
+        model.addAttribute("addCss", addCss);
         model.addAttribute("addScript", addScript);
     }
 
@@ -110,7 +117,3 @@ public class MemberController implements ExceptionProcessor {
     }
     */
 }
-/* localhost:3000/memberjoin -> @Mapping(/member/join)controller -> html파일
- * -> 회원정보 입력, 제출 -> validator(@검증, 작성된 validator) -> 성공 / 실패
- *
- */

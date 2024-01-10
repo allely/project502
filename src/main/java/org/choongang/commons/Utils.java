@@ -121,4 +121,14 @@ public class Utils {
     public String printThumb(long seq, int width, int height) {
         return printThumb(seq, width, height, null);
     }
+
+    /**
+     * 0 이하 정수인 경우 1 이상 정수로 대체
+     * @param num
+     * @param replace
+     * @return
+     */
+    public static int onlyPositiveNumber(int num, int replace) {
+        return num < 1 ? replace : num;
+    }
 }
