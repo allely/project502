@@ -5,6 +5,9 @@ import lombok.RequiredArgsConstructor;
 import org.choongang.admin.menus.Menu;
 import org.choongang.admin.menus.MenuDetail;
 import org.choongang.commons.ExceptionProcessor;
+import org.choongang.commons.Utils;
+import org.choongang.commons.exceptions.AlertException;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
@@ -14,6 +17,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
@@ -21,6 +25,9 @@ import java.util.Objects;
 @RequestMapping("/admin/product")
 @RequiredArgsConstructor
 public class ProductController implements ExceptionProcessor {
+
+    private final CategoryValidator categoryValidator;
+
     @ModelAttribute("menuCode")
     public String getMenuCode() {
         return "product";
@@ -63,6 +70,18 @@ public class ProductController implements ExceptionProcessor {
     public String categoryPs(@Valid RequestCategory form, Errors errors, Model model) {
         commonProcess("category", model);
 
+        categoryValidator.validate(form, errors);
+
+        if (errors.hasErrors()) {
+            List<String> messages = errors.getFieldErrors()
+                    .stream()
+                    .map(e -> e.getCodes())
+                    .map(s -> Utils.getMessage(s[0]))
+                    .toList();
+
+//            System.out.println(message);    // 메세지 출력하지 않는다.. 오류라고 확인하지 않는건가?
+            throw new AlertException(messages.get(0), HttpStatus.BAD_REQUEST);
+        }
         return "admin/product/category";
     }
     // 공통 처리 부분
