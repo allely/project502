@@ -12,6 +12,7 @@ import org.springframework.validation.Validator;
 public class CategoryValidator implements Validator {
 
     private final CategoryRepository repository;
+
     @Override
     public boolean supports(Class<?> clazz) {
         return clazz.isAssignableFrom(RequestCategory.class);
@@ -20,10 +21,10 @@ public class CategoryValidator implements Validator {
     @Override
     public void validate(Object target, Errors errors) {
         /* cateCd : 분류 코드 중복 여부 체크 */
-        RequestCategory form = (RequestCategory) target;
+        RequestCategory form = (RequestCategory)target;
         String cateCd = form.getCateCd();
 
-        if (StringUtils.hasText(cateCd) && repository.existsById(cateCd)) {    // 이미 등록된 분류코드이면
+        if (StringUtils.hasText(cateCd) && repository.existsById(cateCd)) { // 이미 등록된 분류 코드이면
             errors.rejectValue("cateCd", "Duplicated");
         }
     }

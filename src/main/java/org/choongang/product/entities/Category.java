@@ -12,7 +12,7 @@ import org.choongang.commons.entities.BaseMember;
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(indexes = @Index(name="idx_category_listOrder", columnList = "listOrder DESC, createdAt dDESC"))
+@Table(indexes = @Index(name="idx_category_listOrder", columnList = "listOrder DESC, createdAt DESC"))
 public class Category extends BaseMember {
     @Id
     @Column(length=30)

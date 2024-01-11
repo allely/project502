@@ -7,15 +7,14 @@ import org.choongang.admin.menus.MenuDetail;
 import org.choongang.commons.ExceptionProcessor;
 import org.choongang.commons.Utils;
 import org.choongang.commons.exceptions.AlertException;
+import org.choongang.product.entities.Category;
+import org.choongang.product.service.CategoryInfoService;
 import org.choongang.product.service.CategorySaveService;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -29,6 +28,7 @@ public class ProductController implements ExceptionProcessor {
 
     private final CategoryValidator categoryValidator;
     private final CategorySaveService categorySaveService;
+    private final CategoryInfoService categoryInfoService;
 
     @ModelAttribute("menuCode")
     public String getMenuCode() {
@@ -44,19 +44,22 @@ public class ProductController implements ExceptionProcessor {
     @GetMapping
     public String list(Model model) {
         commonProcess("list", model);
-        return "admin/product/list"; //?
+
+        return "admin/product/list";
     }
 
     // 상품 등록
     @GetMapping("/add")
     public String add(Model model) {
         commonProcess("add", model);
+
         return "admin/product/add";
     }
 
     // 상품 등록, 수정 처리
-    @GetMapping("/save")
+    @PostMapping("/save")
     public String save(Model model) {
+
         return "redirect:/admin/product";
     }
 
@@ -64,10 +67,15 @@ public class ProductController implements ExceptionProcessor {
     @GetMapping("/category")
     public String category(@ModelAttribute RequestCategory form, Model model) {
         commonProcess("category", model);
+
+        List<Category> items = categoryInfoService.getList(true);
+        model.addAttribute("items", items);
+
         return "admin/product/category";
     }
 
-    // 상품 분류 추가, 수정
+
+    // 상품 분류 등록
     @PostMapping("/category")
     public String categoryPs(@Valid RequestCategory form, Errors errors, Model model) {
         commonProcess("category", model);
@@ -81,7 +89,7 @@ public class ProductController implements ExceptionProcessor {
                     .map(s -> Utils.getMessage(s[0]))
                     .toList();
 
-//            System.out.println(message);    // 메세지 출력하지 않는다.. 오류라고 확인하지 않는건가?
+//            System.out.println(message);    // 오류메세지 확인용
             throw new AlertException(messages.get(0), HttpStatus.BAD_REQUEST);
         }
 
@@ -92,14 +100,38 @@ public class ProductController implements ExceptionProcessor {
 
         return "common/_execute_script";    //자바스크립트 형태로 페이지를 새로고침함
     }
+
+    // 분류 수정
+    @PatchMapping("/category")
+    public String categoryEdit(@RequestParam("chk") List<Integer> chks, Model model) {
+        commonProcess("category", model);
+
+
+        // 수정 완료 -> 목록 갱신
+        model.addAttribute("script", "parent.location.reload()");
+        return "common/_execute_script";
+    }
+
+    // 카테고리 삭제
+    @DeleteMapping("/category")
+    public String categoryDelete(@RequestParam("chk") List<String> chks, Model model) {
+        commonProcess("category", model);
+
+        // 삭제 완료 후 -> 목록 새로고침
+        model.addAttribute("script", "parent.location.reload()");
+        return "common/_execute_script";
+    }
+
+
+
+
+
+
     // 공통 처리 부분
     private void commonProcess(String mode, Model model) {
         mode = Objects.requireNonNullElse(mode, "list");
         String pageTitle = "상품 목록";
 
-
-        // 에디터(상품 상세, 이미지 위치)
-        // 매니저
         List<String> addCommonScript = new ArrayList<>();
         List<String> addScript = new ArrayList<>();
 
@@ -117,6 +149,5 @@ public class ProductController implements ExceptionProcessor {
         model.addAttribute("addScript", addScript);
         model.addAttribute("addCommonScript", addCommonScript);
         model.addAttribute("subMenuCode", mode);
-
     }
 }
