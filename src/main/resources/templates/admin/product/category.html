@@ -1,19 +1,19 @@
 <!DOCTYPE html>
-<html xmlns:th="http://thymeleaf.org"
+<html xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{admin/layouts/main}">
 <section layout:fragment="content">
     <h1>분류 관리</h1>
 
     <h2>분류 등록</h2>
-    <form name="frmPs" method="post" th:action="@{admin/product/category}" target="ifrmProcess" autocomplete="off" th:object="${requestCategory}">
+    <form name="frmPs" method="post" th:action="@{/admin/product/category}" target="ifrmProcess" autocomplete="off" th:object="${requestCategory}">
         <table class="table_cols">
             <tr>
                 <th width="180">분류코드</th>
                 <td width="300">
                     <input type="text" name="cateCd" th:field="*{cateCd}">
                 </td>
-                <th>분류명</th>
+                <th width="180">분류명</th>
                 <td>
                     <input type="text" name="cateNm" th:field="*{cateNm}">
                 </td>
@@ -39,5 +39,6 @@
         </div>
     </form>
 
+    <h2>분류 목록</h2>
 </section>
 </html>

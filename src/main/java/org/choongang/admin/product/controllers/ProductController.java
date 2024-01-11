@@ -7,6 +7,7 @@ import org.choongang.admin.menus.MenuDetail;
 import org.choongang.commons.ExceptionProcessor;
 import org.choongang.commons.Utils;
 import org.choongang.commons.exceptions.AlertException;
+import org.choongang.product.service.CategorySaveService;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -27,6 +28,7 @@ import java.util.Objects;
 public class ProductController implements ExceptionProcessor {
 
     private final CategoryValidator categoryValidator;
+    private final CategorySaveService categorySaveService;
 
     @ModelAttribute("menuCode")
     public String getMenuCode() {
@@ -82,7 +84,13 @@ public class ProductController implements ExceptionProcessor {
 //            System.out.println(message);    // 메세지 출력하지 않는다.. 오류라고 확인하지 않는건가?
             throw new AlertException(messages.get(0), HttpStatus.BAD_REQUEST);
         }
-        return "admin/product/category";
+
+        categorySaveService.save(form);
+
+        // 분류 추가가 완료되면 부모창 새로고침
+        model.addAttribute("script", "parent.location.reload()");
+
+        return "common/_execute_script";    //자바스크립트 형태로 페이지를 새로고침함
     }
     // 공통 처리 부분
     private void commonProcess(String mode, Model model) {
