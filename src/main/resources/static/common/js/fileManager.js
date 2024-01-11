@@ -18,6 +18,7 @@ commonLib.fileManager = {
                 throw new Error("업로드할 파일을 선택하세요.");
             }
 
+
             // gid
             const gidEl = document.querySelector("[name='gid']");
             if (!gidEl || !gidEl.value.trim()) {
@@ -38,16 +39,7 @@ commonLib.fileManager = {
                 formData.append("singleFile", singleFile);
             }
 
-            // 이미지만 업로드 가능일 때 처리
-            if (imageOnly) {
-                for (const file of files) {
-                    // 이미지 형식이 아닌 파일이 포함되어 있는 경우
-                    if (file.type.indexOf("image/") == -1) {
-                        throw new Error("이미지 형식의 파일만 업로드 가능합니다.");
-                    }
-                }
-                formData.append("imageOnly", imageOnly);
-            }
+            // 이미지만 업로드 가능일때 처리 E
 
             for (const file of files) {
                 formData.append("file", file);
@@ -92,12 +84,10 @@ window.addEventListener("DOMContentLoaded", function() {
             //파일업로드 설정이 이미지만 받도록 설정되어있으면
             const imageOnly = this.dataset.imageOnly == 'true';
             fileEl.imageOnly = imageOnly;
-
             fileEl.location = this.dataset.location;
 
             const singleFile = this.dataset.singleFile == 'true';
             fileEl.singleFile = singleFile;
-
             if (singleFile) fileEl.multiple = false;
 
             // 파일 선택시 이벤트 처리
@@ -105,6 +95,7 @@ window.addEventListener("DOMContentLoaded", function() {
                 const imageOnly = fileEl.imageOnly || false;
                 const location = fileEl.location;
                 const singleFile = fileEl.singleFile;
+
                 commonLib.fileManager.upload(e.target.files, location, imageOnly, singleFile);
             });
 

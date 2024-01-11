@@ -29,8 +29,9 @@ public class FileDeleteService {
         // 파일 삭제 권한 체크
         Member member = memberUtil.getMember();
         String createdBy = data.getCreatedBy();
-        if (StringUtils.hasText(createdBy) && (!memberUtil.isLogin() || (!memberUtil.isAdmin() && StringUtils.hasText(createdBy)
-                && !createdBy.equals(member.getUserId())))) {
+        if (StringUtils.hasText(createdBy) && (
+                !memberUtil.isLogin() || (!memberUtil.isAdmin() && StringUtils.hasText(createdBy)
+                        && !createdBy.equals(member.getUserId())))) {
             throw new UnAuthorizedException(Utils.getMessage("Not.your.file", "errors"));
         }
 
@@ -58,7 +59,7 @@ public class FileDeleteService {
             builder.and(fileInfo.location.eq(location));
         }
 
-        List<FileInfo> items = (List<FileInfo>) repository.findAll(builder);
+        List<FileInfo> items = (List<FileInfo>)repository.findAll(builder);
 
         items.forEach(i -> delete(i.getSeq()));
     }
