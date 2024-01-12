@@ -1,4 +1,4 @@
-package org.choongang.member.constatns;
+package org.choongang.product.constatns;
 
 public enum ProductStatus {
     SALE,   // 판매중

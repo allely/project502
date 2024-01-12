@@ -1,4 +1,4 @@
-package org.choongang.member.constatns;
+package org.choongang.product.constatns;
 
 public enum DiscountType {  // 할인 종류
     PERCENT,    // 상품가 퍼센트 비율 할인
