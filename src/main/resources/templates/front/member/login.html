@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{front/layouts/main}">
+    xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{front/layouts/main}">
 <main layout:fragment="content">
     <h1 th:text="#{로그인}"></h1>
     <form name="frmLogin" method="post" th:action="@{/member/login}" autocomplete="off">
@@ -22,11 +22,6 @@
             </dd>
         </dl>
         <button type="submit" th:text="#{로그인}"></button>
-
-        <div>
-            <input type="checkbox" name="autoLogin" value="true" id="autoLogin">
-            <label for="autoLogin" th:text="#{자동_로그인}"></label>
-        </div>
 
         <div class="error" th:if="${session.Global_error != null}" th:text="${session.Global_error}"></div>
     </form>

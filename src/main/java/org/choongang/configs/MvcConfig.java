@@ -12,20 +12,18 @@ import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
-@EnableJpaAuditing  // 설정활성화
-@EnableConfigurationProperties(FileProperties.class)    // FileProperties 클래스의
+@EnableJpaAuditing
+@EnableConfigurationProperties(FileProperties.class)
 public class MvcConfig implements WebMvcConfigurer {
 
     @Autowired
     private FileProperties fileProperties;
 
     @Override
-    public void addResourceHandlers(ResourceHandlerRegistry registry) { // 정적 자원에 대한 경로를 수정
-        // 현재 경로를 포함한 하위경로 모두
+    public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler(fileProperties.getUrl() + "**")
                 .addResourceLocations("file:///" + fileProperties.getPath());
 
-        // 배포 시 static 내의 css 적용하지 못하는 문제를 해결
         registry.addResourceHandler("/**")
                 .addResourceLocations("classpath:/static/");
     }
@@ -43,6 +41,4 @@ public class MvcConfig implements WebMvcConfigurer {
     public HiddenHttpMethodFilter httpMethodFilter() {
         return new HiddenHttpMethodFilter();
     }
-
-
 }

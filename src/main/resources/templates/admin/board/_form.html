@@ -227,8 +227,17 @@
             <td>
                 <textarea id="html_top" name="htmlTop" th:field="*{htmlTop}"></textarea>
 
-                <button type="button" class="upload_files sbtn" data-location="html_top" data-image-only="true"><i class="xi-image-o"></i>이미지 추가</button>
-                <div class="uploaded_files" id="uploaded_files_html_top"></div>
+                <button type="button" class="upload_files sbtn"
+                    data-location="html_top" data-image-only="true"
+                >
+                    <i class="xi-image"></i>
+                    이미지 추가
+                </button>
+                <div class="uploaded_files" id="uploaded_files_html_top">
+                    <th:block th:each="item : *{htmlTopImages}">
+                        <span th:replace="~{common/_editor_file::item}"></span>
+                    </th:block>
+                </div>
             </td>
         </tr>
     </table>
@@ -240,8 +249,17 @@
             <td>
                 <textarea id="html_bottom" name="htmlBottom" th:field="*{htmlBottom}"></textarea>
 
-                <button type="button" class="upload_files sbtn" data-location="html_bottom" data-image-only="true"><i class="xi-image-o"></i>이미지 추가</button>
-                <div class="uploaded_files" id="uploaded_files_html_bottom"></div>
+                <button type="button" class="upload_files sbtn"
+                        data-location="html_bottom" data-image-only="true"
+                >
+                    <i class="xi-image"></i>
+                    이미지 추가
+                </button>
+                <div class="uploaded_files" id="uploaded_files_html_bottom">
+                    <th:block th:each="item : *{htmlBottomImages}">
+                        <span th:replace="~{common/_editor_file::item}"></span>
+                    </th:block>
+                </div>
             </td>
         </tr>
     </table>

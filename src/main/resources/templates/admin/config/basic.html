@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{admin/layouts/main}">
+    xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{admin/layouts/main}">
 
 <section layout:fragment="content">
     <div th:replace="~{admin/commons/_message::message}"></div>
@@ -40,7 +40,7 @@
             <tr>
                 <th width="180">가로X세로</th>
                 <td>
-                    <textarea name="thumbSize" th:field="*{thumbSize}" placeholder="예) 150X150, 여러 개는 줄개행하여 입력"></textarea>
+                    <textarea name="thumbSize" th:field="*{thumbSize}" placeholder="예) 150X150, 여러개는 줄개행하여 입력"></textarea>
                 </td>
             </tr>
         </table>

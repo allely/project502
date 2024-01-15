@@ -31,7 +31,7 @@ public class FileDeleteService {
         String createdBy = data.getCreatedBy();
         if (StringUtils.hasText(createdBy) && (
                 !memberUtil.isLogin() || (!memberUtil.isAdmin() && StringUtils.hasText(createdBy)
-                        && !createdBy.equals(member.getUserId())))) {
+                && !createdBy.equals(member.getUserId())))) {
             throw new UnAuthorizedException(Utils.getMessage("Not.your.file", "errors"));
         }
 

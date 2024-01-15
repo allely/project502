@@ -24,16 +24,15 @@ public class FileDownloadService {
         } catch (UnsupportedEncodingException e) {}
 
         File file = new File(filePath);
-
         try (FileInputStream fis = new FileInputStream(file);
-             BufferedInputStream bis = new BufferedInputStream(fis)) {
+            BufferedInputStream bis = new BufferedInputStream(fis)) {
             OutputStream out = response.getOutputStream(); // 응답 Body에 출력
 
             response.setHeader("Content-Disposition", "attachment; filename=" + fileName);
             response.setHeader("Content-Type", "application/octet-stream");
             response.setIntHeader("Expires", 0); // 만료 시간 X
-            response.setHeader("Cache-Control", "must-revalidate");     // 캐시
-            response.setHeader("Pragma", "public"); // 옛날 브라우저에 필요함
+            response.setHeader("Cache-Control", "must-revalidate");
+            response.setHeader("Pragma", "public");
             response.setHeader("Content-Length", String.valueOf(file.length()));
 
             while(bis.available() > 0) {

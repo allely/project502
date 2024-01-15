@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<div class="year_month">
+    <a th:href="@{/calendar(yaer=${prevYear}, month=${prevMonth})}" th:text="#{이전달}"></a>
+    <span class="current">
+        <th:block th:text="${year}"></th:block><th:block th:text="#{년}"></th:block>
+        <th:block th:text="${numbers.formatInteger(month, 2)}"></th:block><th:block th:text="#{월}"></th:block>
+    </span>
+    <a th:href="@{/calendar(year=${nextYear}, month=${nextMonth})}" th:text="#{다음달}"></a>
+</div>
+</body>
+</html>

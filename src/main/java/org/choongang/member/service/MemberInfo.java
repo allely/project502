@@ -1,4 +1,4 @@
-package org.choongang.member.services;
+package org.choongang.member.service;
 
 import lombok.Builder;
 import lombok.Data;
@@ -19,38 +19,39 @@ public class MemberInfo implements UserDetails {
     private Member member;
 
     private Collection<? extends GrantedAuthority> authorities;
+
     @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {    // 특정 사용자만 사용할 수 있도록 권한 확인(인가)
+    public Collection<? extends GrantedAuthority> getAuthorities() {
         return authorities;
     }
 
     @Override
-    public String getPassword() {   //
+    public String getPassword() {
         return password;
     }
 
     @Override
     public String getUsername() {
-        return StringUtils.hasText(email)? email : userId;  // email 있으면 email로, 없으면 id로
+        return StringUtils.hasText(email) ? email : userId;
     }
 
     @Override
-    public boolean isAccountNonExpired() {  // 계정 만료 여부 확인 -> 접근 O/X
+    public boolean isAccountNonExpired() {
         return true;
     }
 
     @Override
-    public boolean isAccountNonLocked() {   //  계정 잠김 확인
+    public boolean isAccountNonLocked() {
         return true;
     }
 
     @Override
-    public boolean isCredentialsNonExpired() {  // 주기적으로 비밀번호 재설정하도록
+    public boolean isCredentialsNonExpired() {
         return true;
     }
 
     @Override
-    public boolean isEnabled() {    //
+    public boolean isEnabled() {
         return true;
     }
 }

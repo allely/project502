@@ -23,7 +23,7 @@ public class ApiMemberController implements ExceptionRestProcessor {
      */
     @GetMapping("/email_dup_check")
     public JSONData<Object> duplicateEmailCheck(@RequestParam("email") String email) {
-        boolean isExists = memberRepository.existByEmail(email);
+        boolean isExists = memberRepository.existsByEmail(email);
 
         JSONData<Object> data = new JSONData<>();
         data.setSuccess(isExists);

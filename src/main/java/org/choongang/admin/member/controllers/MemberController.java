@@ -7,7 +7,7 @@ import org.choongang.commons.ExceptionProcessor;
 import org.choongang.commons.ListData;
 import org.choongang.member.controllers.MemberSearch;
 import org.choongang.member.entities.Member;
-import org.choongang.member.services.MemberInfoService;
+import org.choongang.member.service.MemberInfoService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -41,18 +41,11 @@ public class MemberController implements ExceptionProcessor {
 
         ListData<Member> data = infoService.getList(search);
 
-        model.addAttribute("items", data.getItems());   // 목록
+        model.addAttribute("items", data.getItems()); // 목록
         model.addAttribute("pagination", data.getPagination()); // 페이징
 
         return "admin/member/list";
     }
-
-    @GetMapping("/authority")
-    public String authority(Model model) {
-
-       return "admin/member/authority";
-    }
-
 
     private void commonProcess(String mode, Model model) {
         mode = Objects.requireNonNullElse(mode, "list");
@@ -60,6 +53,5 @@ public class MemberController implements ExceptionProcessor {
 
         model.addAttribute("subMenuCode", mode);
         model.addAttribute("pageTitle", pageTitle);
-
     }
 }

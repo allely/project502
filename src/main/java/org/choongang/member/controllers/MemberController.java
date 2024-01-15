@@ -4,13 +4,15 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.choongang.commons.ExceptionProcessor;
 import org.choongang.commons.Utils;
-import org.choongang.member.services.JoinService;
+import org.choongang.member.service.JoinService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.Errors;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.bind.support.SessionStatus;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,6 +21,7 @@ import java.util.List;
 @RequestMapping("/member")
 @RequiredArgsConstructor
 public class MemberController implements ExceptionProcessor {
+
     private final Utils utils;
     private final JoinService joinService;
 
@@ -26,14 +29,11 @@ public class MemberController implements ExceptionProcessor {
     public String join(@ModelAttribute RequestJoin form, Model model) {
         commonProcess("join", model);
 
-        // 이메일 인증 여부 false로 초기화
-        model.addAttribute("EmailAuthVerified", false);
-
         return utils.tpl("member/join");
     }
 
     @PostMapping("/join")
-    public String joinPs(@Valid RequestJoin form, Errors errors, Model model, SessionStatus sessionStatus) {
+    public String joinPs(@Valid RequestJoin form, Errors errors,Model model) {
         commonProcess("join", model);
 
         joinService.process(form, errors);
@@ -42,8 +42,6 @@ public class MemberController implements ExceptionProcessor {
             return utils.tpl("member/join");
         }
 
-        // 이메일 인증 여부 false로 초기화
-        model.addAttribute("EmailAuthVerified", false);
 
         return "redirect:/member/login";
     }
@@ -51,69 +49,27 @@ public class MemberController implements ExceptionProcessor {
     @GetMapping("/login")
     public String login(Model model) {
         commonProcess("login", model);
+
         return utils.tpl("member/login");
     }
 
-    /*
-     * 회원가입 title 유지 위해
-     */
-    private void commonProcess(String mode, Model model) {  // 공통 처리할 메서드, 내부 사용으로 private
+    private void commonProcess(String mode, Model model) {
         mode = StringUtils.hasText(mode) ? mode : "join";
         String pageTitle = Utils.getMessage("회원가입", "commons");
 
-        List<String> addCss = new ArrayList<>();
-        List<String> addScript = new ArrayList<>();  // 프론트 자바 스크립트
-
+        List<String> addCommonScript = new ArrayList<>(); // 공통 자바스크립트
+        List<String> addScript = new ArrayList<>(); // 프론트 자바 스크립트
 
         if (mode.equals("login")) {
             pageTitle = Utils.getMessage("로그인", "commons");
+
         } else if (mode.equals("join")) {
-            addCss.add("member/join");
-            addScript.add("member/join");
+            addCommonScript.add("fileManager");
+            addScript.add("member/form");
         }
 
         model.addAttribute("pageTitle", pageTitle);
-        model.addAttribute("addCss", addCss);
+        model.addAttribute("addCommonScript", addCommonScript);
         model.addAttribute("addScript", addScript);
     }
-
-    /*
-    @ResponseBody   // rest방식 반환
-    @GetMapping("/info")
-    public void info(Principal principal) {
-        String username = principal.getName();
-        System.out.printf("username=%s%n", username);
-    }
-    */
-    /*
-    @ResponseBody
-    @GetMapping("/info")
-    public void info(@AuthenticationPrincipal MemberInfo memberInfo) {
-
-        System.out.println(memberInfo);
-    }
-     */
-    /*
-    @ResponseBody
-    @GetMapping("/info")
-    public void info() {
-        MemberInfo memberInfo = (MemberInfo)SecurityContextHolder
-                                    .getContext()
-                                    .getAuthentication()
-                                    .getPrincipal();
-        System.out.println(memberInfo);
-    }
-     */
-/*
-    @ResponseBody
-    @GetMapping("/info")
-    public void info() {
-        if (memberUtils.isLogin()) {
-            Member member = memberUtils.getMember();
-            System.out.println(member);
-        } else {
-            System.out.println("미로그인 상태...");
-        }
-    }
-    */
 }

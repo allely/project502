@@ -2,9 +2,8 @@
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{admin/layouts/main}">
-    <section layout:fragment="content">
-    <!--    [[${subMenus}]]-->
+<section layout:fragment="content">
 
-        <th:block  th:replace="~{common/_pagination::pagination}"></th:block>
-    </section>
+    <th:block th:replace="~{common/_pagination::pagination}"></th:block>
+</section>
 </html>

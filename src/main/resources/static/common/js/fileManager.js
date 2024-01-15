@@ -10,7 +10,7 @@ commonLib.fileManager = {
     * @param files : 업로드 파일 정보 목록
     * @param location : 파일 그룹(gid) 안에서 위치 구분 값(예 - 메인이미지, 목록이미지, 상세페이지 이미지)
     * @param imageOnly : true - 이미지만 업로드 가능하게 통제
-    * @param singleFIle : true - 단일 파일 업로드
+    * @param singleFile : true - 단일 파일 업로드
     */
     upload(files, location, imageOnly, singleFile) {
         try {
@@ -39,6 +39,17 @@ commonLib.fileManager = {
                 formData.append("singleFile", singleFile);
             }
 
+            // 이미지만 업로드 가능일때 처리 S
+            if (imageOnly) {
+                for (const file of files) {
+                    // 이미지 형식이 아닌 파일이 포함되어 있는 경우
+                    if (file.type.indexOf("image/") == -1) {
+                        throw new Error("이미지 형식의 파일만 업로드 가능합니다.");
+                    }
+                }
+
+                formData.append("imageOnly", imageOnly);
+            }
             // 이미지만 업로드 가능일때 처리 E
 
             for (const file of files) {
@@ -49,8 +60,7 @@ commonLib.fileManager = {
             ajaxLoad("POST", "/api/file", formData, "json")
                 .then(res => { // 요청 성공시
                     if (res && res.success) { // 파일 업로드 성공시
-                        // callBackFileUpload 함수가 정의되어 있다면 실행
-                        // parent : ??
+
                         if (typeof parent.callbackFileUpload == 'function') {
                             parent.callbackFileUpload(res.data);
                         }
@@ -77,11 +87,10 @@ window.addEventListener("DOMContentLoaded", function() {
     for (const el of uploadFiles) {
         el.addEventListener("click", function() {
 
-            const fileEl = document.createElement("input");
-            fileEl.type="file";
-            fileEl.multiple = true; // 여러개 파일을 선택 가능하게
+           const fileEl = document.createElement("input");
+           fileEl.type="file";
+           fileEl.multiple = true; // 여러개 파일을 선택 가능하게
 
-            //파일업로드 설정이 이미지만 받도록 설정되어있으면
             const imageOnly = this.dataset.imageOnly == 'true';
             fileEl.imageOnly = imageOnly;
             fileEl.location = this.dataset.location;
@@ -92,11 +101,11 @@ window.addEventListener("DOMContentLoaded", function() {
 
             // 파일 선택시 이벤트 처리
             fileEl.addEventListener("change", function(e) {
-                const imageOnly = fileEl.imageOnly || false;
-                const location = fileEl.location;
-                const singleFile = fileEl.singleFile;
+              const imageOnly = fileEl.imageOnly || false;
+              const location = fileEl.location;
+              const singleFile = fileEl.singleFile;
 
-                commonLib.fileManager.upload(e.target.files, location, imageOnly, singleFile);
+              commonLib.fileManager.upload(e.target.files, location, imageOnly, singleFile);
             });
 
             fileEl.click();
