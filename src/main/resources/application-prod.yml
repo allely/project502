@@ -11,7 +11,7 @@ spring:
   # 데이터베이스 설정
   datasource:
     driverClassName: oracle.jdbc.driver.OracleDriver
-    url: jdbc:oracle:thin:@localhost:1521:xe
+    url: jdbc:oracle:thin:@13.124.196.150:1521:xe
     username: PROJECT
     password: _aA123456
 
@@ -28,10 +28,8 @@ spring:
 
   # 타임리프 설정
   thymeleaf:
-    cache: false
-    prefix: file:src/main/resources/templates/
-
-
+    cache: true
+    prefix: classpath:/templates/
 
 # 로거 설정
 logging:
@@ -41,6 +39,7 @@ logging:
         type:
           descriptor:
             sql: trace
+
 
 # 파일 업로드 경로 설정
 file:

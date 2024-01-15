@@ -14,16 +14,18 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/file")
 @RequiredArgsConstructor
-public class ApiFileController implements ExceptionRestProcessor {  // json방식으로 에러 응답하도록
+public class ApiFileController implements ExceptionRestProcessor {
 
     private final FileUploadService uploadService;
     private final FileDeleteService deleteService;
+
     @PostMapping
     public JSONData<List<FileInfo>> upload(@RequestParam("file") MultipartFile[] files,
-                                           @RequestParam(name = "gid", required = false) String gid,
-                                           @RequestParam(name = "location", required = false) String location,
-                                           @RequestParam(name= "imageOnly", required = false) boolean imageOnly,
-                                           @RequestParam(name = "singleFile", required = false) boolean singleFile) {
+                                           @RequestParam(name="gid", required = false) String gid,
+                                           @RequestParam(name="location", required = false) String location,
+                                           @RequestParam(name="imageOnly", required=false) boolean imageOnly,
+                                           @RequestParam(name="singleFile", required = false) boolean singleFile) {
+
         List<FileInfo> uploadedFiles = uploadService.upload(files, gid, location, imageOnly, singleFile);
 
         return new JSONData<>(uploadedFiles);
@@ -31,6 +33,7 @@ public class ApiFileController implements ExceptionRestProcessor {  // json방�
 
     @GetMapping("/{seq}")
     public void delete(@PathVariable("seq") Long seq) {
+
         deleteService.delete(seq);
     }
 }

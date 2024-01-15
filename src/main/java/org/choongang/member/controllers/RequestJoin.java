@@ -9,7 +9,7 @@ import lombok.Data;
 import java.util.UUID;
 
 @Data
-public class RequestJoin {  // 요청 데이터를 처리할 수 있는 커맨드 객체
+public class RequestJoin {
 
     private String gid = UUID.randomUUID().toString();
 

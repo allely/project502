@@ -1,8 +1,6 @@
 spring:
-
   # 데이터베이스 설정
   datasource:
-    # 테스트용 서버 설정
     driverClassName: org.h2.Driver
     url: jdbc:h2:mem:test
     username: sa

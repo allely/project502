@@ -50,7 +50,6 @@ h2 { margin: 0 0 10px 0; font-size: 1.385rem; line-height: 1; }
 .table_rows tbody td { border-bottom: 1px solid #ccc; padding: 7px 10px; }
 
 .table_actions { background: #fff; padding: 7px 10px; border-bottom: 1px solid #ccc; }
-
 /* 테이블 공통 E */
 
 /* 입력 공통 S */
@@ -66,6 +65,9 @@ select { border: 1px solid #d5d5d5; height: 35px; }
 .submit_btns { text-align: center; margin: 30px 0; }
 .submit_btns .btn { display: inline-block; min-width: 200px; height: 45px; padding: 0 15px; border: 1px solid #222; background: #fff; font-size: 1.4rem; font-weight: 500; color: #222; border-radius: 3px; cursor: pointer; line-height: 43px; }
 .submit_btns .btn:last-of-type { background: #222; color: #fff; }
+
+.search_btn { text-align: center; margin: 20px 0 30px; }
+.search_btn .btn { display: inline-block; min-width: 200px; text-align: center; font-size:1.4rem; font-weight: 500; height: 45px; line-height: 45px; background: #596b99; color: #fff; cursor: pointer; border-radius: 3px; border: 0; }
 
 .sbtn { border: 1px solid #222; color: #222; background: #fff; display: inline-block; padding: 7px 20px; border-radius: 3px; cursor: pointer; line-height: 1; }
 .sbtn:hover, .sbtn.on { background: #596b99; color: #fff; border-color: #596b99; }
@@ -90,3 +92,15 @@ select { border: 1px solid #d5d5d5; height: 35px; }
 .pagination .page.on { background: #596b99; color: #fff; }
 .pagination .page + .page { margin-left: 3px; }
 /* 페이징 공통 E */
+
+/* 파일 공통 S */
+.file_tpl_box { display: inline-block; padding: 7px 10px; border: 1px solid #222; border-radius: 3px; margin: 5px 2px 0 0; background: #fff; }
+
+.file_tpl_box a:not(.remove) { text-decoration: underline; }
+.file_tpl_box i { padding: 0 5px; cursor: pointer; }
+
+/* 파일 공통 E */
+
+/* 입력 항목 그룹화 */
+.input_grp { display: flex; align-items: center; }
+.input_grp > * + * { margin-left: 3px; }

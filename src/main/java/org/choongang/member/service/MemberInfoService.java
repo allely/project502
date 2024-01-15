@@ -1,4 +1,4 @@
-package org.choongang.member.services;
+package org.choongang.member.service;
 
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Order;
@@ -18,8 +18,6 @@ import org.choongang.member.entities.Authorities;
 import org.choongang.member.entities.Member;
 import org.choongang.member.entities.QMember;
 import org.choongang.member.repositories.MemberRepository;
-import org.springframework.data.domain.Page;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -36,26 +34,27 @@ public class MemberInfoService implements UserDetailsService {
     private final FileInfoService fileInfoService;
     private final HttpServletRequest request;
     private final EntityManager em;
+
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
-        Member member = memberRepository.findByEmail(username)      // 이메일로 조회
-                .orElseGet(() -> memberRepository.findByUserId(username)   // 아이디로 조회
+        Member member = memberRepository.findByEmail(username) // 이메일 조회
+                .orElseGet(() -> memberRepository.findByUserId(username) // 아이디로 조회
                         .orElseThrow(() -> new UsernameNotFoundException(username)));
 
         List<SimpleGrantedAuthority> authorities = null;
-                List<Authorities> tmp = member.getAuthorities();
+        List<Authorities> tmp = member.getAuthorities();
         if (tmp != null) {
             authorities = tmp.stream()
                     .map(s -> new SimpleGrantedAuthority(s.getAuthority().name()))
                     .toList();
         }
+
         /* 프로필 이미지 처리 S */
         List<FileInfo> files = fileInfoService.getListDone(member.getGid());
         if (files != null && !files.isEmpty()) {
             member.setProfileImage(files.get(0));
         }
-
         /* 프로필 이미지 처리 E */
 
         return MemberInfo.builder()
@@ -63,9 +62,9 @@ public class MemberInfoService implements UserDetailsService {
                 .userId(member.getUserId())
                 .password(member.getPassword())
                 .member(member)
+                .authorities(authorities)
                 .build();
     }
-
 
     /**
      * 회원 목록
@@ -74,14 +73,15 @@ public class MemberInfoService implements UserDetailsService {
      * @return
      */
     public ListData<Member> getList(MemberSearch search) {
-        int page = Utils.onlyPositiveNumber(search.getPage(), 1);   // 페이지 번호
-        int limit = Utils.onlyPositiveNumber(search.getLimit(), 20);    // 1페이지 당 레코드 갯수
-        int offset = (page -1) * limit; // 레코드 시작 위치 번호
+
+        int page = Utils.onlyPositiveNumber(search.getPage(), 1); // 페이지 번호
+        int limit = Utils.onlyPositiveNumber(search.getLimit(), 20); // 1페이지당 레코드 갯수
+        int offset = (page - 1) * limit; // 레코드 시작 위치 번호
 
         BooleanBuilder andBuilder = new BooleanBuilder();
         QMember member = QMember.member;
 
-        PathBuilder<Member> pathBuilder = new PathBuilder<>(Member.class, "member");    // 정렬 시 사용
+        PathBuilder<Member> pathBuilder = new PathBuilder<>(Member.class, "member");
 
         List<Member> items = new JPAQueryFactory(em)
                 .selectFrom(member)
@@ -89,13 +89,13 @@ public class MemberInfoService implements UserDetailsService {
                 .fetchJoin()
                 .where(andBuilder)
                 .limit(limit)
-                .offset(offset)   // 시작위치를 구하는 ?
+                .offset(offset)
                 .orderBy(new OrderSpecifier(Order.DESC, pathBuilder.get("createdAt")))
                 .fetch();
 
         /* 페이징 처리 S */
-        int total = (int) memberRepository.count(andBuilder);   // 총 레코드 갯수
-//        total = 123456;   // 실험용 회원수 지정
+        int total = (int)memberRepository.count(andBuilder); // 총 레코드 갯수
+
         Pagination pagination = new Pagination(page, total, 10, limit, request);
         /* 페이징 처리 E */
 

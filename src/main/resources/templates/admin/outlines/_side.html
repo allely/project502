@@ -2,20 +2,17 @@
 <html xmlns:th="http://www.thymeleaf.org">
     <aside th:fragment="menus">
         <a th:href="@{/admin/config}" th:classappend="${menuCode} == 'config' ? 'on'">
-            <i class="xi-cog"></i>기본설정
+            <i class="xi-cog"></i> 기본설정
         </a>
         <a th:href="@{/admin/member}" th:classappend="${menuCode} == 'member' ? 'on'">
-            <i class="xi-users"></i>회원관리
-        </a>
-        <a th:href="@{/admin/product}" th:classappend="${menuCode} == 'product' ? 'on'">
-            <i class="xi-list"></i>상품 관리
-        </a>
-        <a th:href="@{/admin/order}" th:classappend="${menuCode} == 'order' ? 'on'">
-            <i class="xi-list"></i>주문 관리
+            <i class="xi-users"></i> 회원 관리
         </a>
         <a th:href="@{/admin/board}" th:classappend="${menuCode} == 'board' ? 'on'">
-            <i class="xi-pen"></i>게시판 관리
+            <i class="xi-pen"></i> 게시판 관리
+        </a>
+
+        <a th:href="@{/admin/reservation}" th:classappend="${menuCode} == 'reservation' ? 'on'">
+            <i class="xi-tint"></i> 예약 관리
         </a>
     </aside>
-
 </html>

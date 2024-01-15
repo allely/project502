@@ -43,7 +43,7 @@ public class Utils {
 
         String pattern = ".*(iPhone|iPod|iPad|BlackBerry|Android|Windows CE|LG|MOT|SAMSUNG|SonyEricsson).*";
 
-        return ua.matches(pattern);
+       return ua.matches(pattern);
     }
 
     public String tpl(String path) {
@@ -63,6 +63,7 @@ public class Utils {
         } else {
             bundle = validationsBundle;
         }
+
         return bundle.getString(code);
     }
 
@@ -77,6 +78,7 @@ public class Utils {
      */
     public String nl2br(String str) {
         str = Objects.requireNonNullElse(str, "");
+
         str = str.replaceAll("\\n", "<br>")
                 .replaceAll("\\r", "");
 
@@ -84,25 +86,27 @@ public class Utils {
     }
 
     /**
-     * 썸네일 사이즈 설정
+     * 썸네일 이미지 사이즈 설정
+     *
      * @return
      */
     public List<int[]> getThumbSize() {
-        BasicConfig config = (BasicConfig) request.getAttribute("siteConfig");
-        String thumbSize = config.getThumbSize();   // \r\n
+        BasicConfig config = (BasicConfig)request.getAttribute("siteConfig");
+        String thumbSize = config.getThumbSize(); // \r\n
         String[] thumbsSize = thumbSize.split("\\n");
 
         List<int[]> data = Arrays.stream(thumbsSize)
-                .filter(StringUtils::hasText)       //
-                .map(s -> s.replaceAll("\\s+", "")) // ???
+                .filter(StringUtils::hasText)
+                .map(s -> s.replaceAll("\\s+", ""))
                 .map(this::toConvert).toList();
+
 
         return data;
     }
+
     private int[] toConvert(String size) {
-        size = size.trim(); // 공백 제거
-        int[] data = Arrays.stream(size.replaceAll("\\r", "")   // \r 제거
-                .toUpperCase().split("X"))
+        size = size.trim();
+        int[] data = Arrays.stream(size.replaceAll("\\r", "").toUpperCase().split("X"))
                 .mapToInt(Integer::parseInt).toArray();
 
         return data;
@@ -115,6 +119,7 @@ public class Utils {
             String image = String.format("<img src='%s'%s>", data[1], cls);
             return image;
         }
+
         return "";
     }
 
@@ -123,12 +128,33 @@ public class Utils {
     }
 
     /**
-     * 0 이하 정수인 경우 1 이상 정수로 대체
+     * 0이하 정수 인 경우 1이상 정수로 대체
+     *
      * @param num
      * @param replace
      * @return
      */
     public static int onlyPositiveNumber(int num, int replace) {
         return num < 1 ? replace : num;
+    }
+
+    /**
+     * 요청 데이터 단일 조회 편의 함수
+     *
+     * @param name
+     * @return
+     */
+    public String getParam(String name) {
+        return request.getParameter(name);
+    }
+
+    /**
+     * 요청 데이터 복수개 조회 편의 함수
+     *
+     * @param name
+     * @return
+     */
+    public String[] getParams(String name) {
+        return request.getParameterValues(name);
     }
 }

@@ -16,17 +16,17 @@ import java.util.Arrays;
 @Component
 @RequiredArgsConstructor
 public class CommonInterceptor implements HandlerInterceptor {
-
     private final ConfigInfoService infoService;
+
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
 
         checkDevice(request);
         clearLoginData(request);
         loadSiteConfig(request);
+
         return true;
     }
-
 
     /**
      * PC, 모바일 수동 변경 처리
@@ -45,20 +45,22 @@ public class CommonInterceptor implements HandlerInterceptor {
         HttpSession session = request.getSession();
         session.setAttribute("device", device);
     }
+
     private void clearLoginData(HttpServletRequest request) {
         String URL = request.getRequestURI();
-        if (URL.indexOf("/member/login") == -1) {   // 안의 주소 내용이 없을 때
+        if (URL.indexOf("/member/login") == -1) {
             HttpSession session = request.getSession();
             MemberUtil.clearLoginData(session);
         }
     }
+
     private void loadSiteConfig(HttpServletRequest request) {
-        String[] excludes = {".js", ".css", ".png", ".jpg", ".jpeg", ".gif", ".pdf", ".xls", ".xlxs", ".ppt"};
+        String[] excludes = {".js", ".css", ".png", ".jpg", ".jpeg", "gif", ".pdf", ".xls", ".xlxs", ".ppt"};
 
         String URL = request.getRequestURI().toLowerCase();
 
         boolean isIncluded = Arrays.stream(excludes).anyMatch(s -> URL.contains(s));
-        if(isIncluded) {
+        if (isIncluded) {
             return;
         }
 

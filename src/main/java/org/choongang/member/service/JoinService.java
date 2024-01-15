@@ -1,4 +1,4 @@
-package org.choongang.member.services;
+package org.choongang.member.service;
 
 import lombok.RequiredArgsConstructor;
 import org.choongang.file.service.FileUploadService;
@@ -52,6 +52,7 @@ public class JoinService {
 
         // 파일 업로드 완료 처리
         uploadService.processDone(form.getGid());
+
     }
 
     public void process(Member member) {

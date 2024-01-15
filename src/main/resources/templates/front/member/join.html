@@ -16,27 +16,6 @@
                 <div class="error" th:each="err : ${#fields.errors('email')}" th:text="${err}"></div>
             </dd>
         </dl>
-<!--        <dl>-->
-<!--            <dt th:text="#{이메일}"></dt>-->
-<!--            <dd>-->
-<!--                <div>-->
-<!--                    <input type="text" name="email" th:field="*{email}" th:readonly="${session.EmailAuthVerified != null && session.EmailAuthVerified}">-->
-<!--                    <button th:if="${session.EmailAuthVerified == null || !session.EmailAuthVerified}" type="button" id="email_verify" th:text="#{인증코드전송}"></button>-->
-<!--                </div>-->
-<!--                <div class="auth_box">-->
-<!--                    <th:block th:if="${session.EmailAuthVerified == null || !session.EmailAuthVerified}">-->
-<!--                        <input type="text" id="auth_num" th:placeholder="#{인증코드_입력}">-->
-<!--                        <span id="auth_count">03:00</span>-->
-<!--                        <button type="button" id="email_confirm" th:text="#{확인}" disabled></button>-->
-<!--                        <button type="button" id="email_re_verify" th:text="#{재전송}" disabled></button>-->
-<!--                    </th:block>-->
-<!--                    <th:block th:unless="${session.EmailAuthVerified == null || !session.EmailAuthVerified}">-->
-<!--                        <span class='confirmed' th:text="#{확인된_이메일_입니다.}"></span>-->
-<!--                    </th:block>-->
-<!--                </div>-->
-<!--                <div class="error" th:each="err : ${#fields.errors('email')}" th:text="${err}"></div>-->
-<!--            </dd>-->
-<!--        </dl>-->
 
         <dl>
             <dt th:text="#{아이디}"></dt>
@@ -69,16 +48,18 @@
                 <div class="error" th:each="err : ${#fields.errors('name')}" th:text="${err}"></div>
             </dd>
         </dl>
-<!--        <dl>-->
-<!--            <dt th:text="#{프로필_이미지}"></dt>-->
-<!--            <dd>-->
-<!--                <div id="profile_image"></div>-->
-<!--                <button type="button" class="upload_files" th:text="#{이미지_업로드}" data-image-only="true" data-single-file="true"></button>-->
-<!--            </dd>-->
-<!--        </dl>-->
+
+        <dl>
+            <dt th:text="#{프로필_이미지}"></dt>
+            <dd>
+                <div id="profile_image"></div>
+                <button type="button" class="upload_files"
+                        th:text="#{이미지_업로드}" data-image-only="true" data-single-file="true"></button>
+            </dd>
+        </dl>
 
         <div th:text="#{회원가입_약관}"></div>
-            <textarea class="terms" th:utext="${@utils.nl2br(siteConfig.joinTerms)}"></textarea>
+        <div class="terms" th:utext="${@utils.nl2br(siteConfig.joinTerms)}"></div>
         <div class="terms_agree">
             <input type="checkbox" name="agree" value="true" id="agree" th:field="*{agree}">
             <label for="agree" th:text="#{회원가입_약관에_동의합니다.}"></label>
@@ -88,7 +69,7 @@
         <button type="submit" th:text="#{가입하기}"></button>
     </form>
 
-<!--    <script th:replace="~{common/_file_tpl::image1_tpl}"></script>-->
+    <script th:replace="~{common/_file_tpl::image1_tpl}"></script>
 
 </main>
 </html>

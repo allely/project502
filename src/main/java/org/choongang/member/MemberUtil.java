@@ -6,8 +6,6 @@ import org.choongang.member.entities.Authorities;
 import org.choongang.member.entities.Member;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
-
 @Component
 @RequiredArgsConstructor
 public class MemberUtil {
@@ -21,20 +19,26 @@ public class MemberUtil {
                     .stream().map(Authorities::getAuthority)
                     .anyMatch(a -> a == Authority.ADMIN || a == Authority.MANAGER);
         }
+
         return false;
     }
+
     public boolean isLogin() {
+
         return getMember() != null;
     }
+
     public Member getMember() {
         Member member = (Member) session.getAttribute("member");
 
         return member;
     }
+
     public static void clearLoginData(HttpSession session) {
         session.removeAttribute("username");
         session.removeAttribute("NotBlank_username");
         session.removeAttribute("NotBlank_password");
         session.removeAttribute("Global_error");
     }
+
 }
